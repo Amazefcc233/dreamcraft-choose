@@ -76,6 +76,44 @@
 			<script src="assets/js/breakpoints.min.js"></script>
 			<script src="assets/js/util.js"></script>
 			<script src="assets/js/main.js"></script>
+		<!-- 进度条 -->
+			<script>
+    
+				$(function () {
+					$(window).load(function () {
+						NProgress.done();
+					});
+					NProgress.set(0.0);
+					NProgress.configure({showSpinner: false});
+					NProgress.configure({minimum: 0.4});
+					NProgress.configure({easing: 'ease', speed: 1200});
+					NProgress.configure({trickleSpeed: 200});
+					NProgress.configure({trickleRate: 0.2, trickleSpeed: 1200});
+					NProgress.inc();
+					$(window).ready(function () {
+						NProgress.start();
+					});
+				});
+    
 
+				window.addEventListener('load', () => {
+					fetch('https://api.lwl12.com/hitokoto/v1?encode=realjson', {
+						method: 'GET',
+					}).then((response) => {
+						return response.json();
+					}).then((r) => {
+						insertHitokoto(r);
+					})
+				});
+
+				function insertHitokoto(data) {
+					let hitokoto = document.getElementById('lwlhitokoto');
+					if (data.author || data.source) {
+						hitokoto.innerHTML = `${data.text} —— ${data.author} ${data.source}`;
+					} else {
+						hitokoto.innerHTML = `${data.text}`;
+					}
+				}
+			</script>
 	</body>
 </html>
